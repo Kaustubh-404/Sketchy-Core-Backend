@@ -308,6 +308,7 @@ app.get('/api/balances', async (req, res) => {
 
 app.use(cors({
   origin: ["https://sketchy-tcore-frontend.vercel.app"],
+  allowedHeaders: ["Content-Type", "Authorization"],
   methods: ['GET', 'POST'],
   credentials: true
 }));
@@ -316,6 +317,7 @@ const httpServer = createServer(app);
 const io = new Server(httpServer, {
   cors: {
     origin: ["https://sketchy-tcore-frontend.vercel.app"],
+    allowedHeaders: ["Content-Type", "Authorization"],
     methods: ['GET', 'POST'],
     credentials: true
   },
