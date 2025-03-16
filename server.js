@@ -11,6 +11,8 @@ let provider;
 let gameManagerWallet;
 let scribbleContract;
 
+
+
 // Initialize blockchain connection
 function initializeBlockchain() {
   try {
@@ -220,6 +222,10 @@ const app = express();
 // Basic route for checking if server is running
 app.get('/', (req, res) => {
   res.send('Socket.io game server is running');
+});
+
+app.get("/socket.io/", (req, res) => {
+  res.json({ message: "WebSocket endpoint is active" });
 });
 
 // API endpoint to check room status in the contract
@@ -790,6 +796,13 @@ io.on('connection', (socket) => {
 
   socket.join(gameCode);
   console.log(`Player ${address} joined game ${gameCode}`);
+
+  socket.on("disconnect", () => {
+    console.log(`Player ${address} disconnected from game ${gameCode}`);
+  });
+
+  socket.emit("connectionSuccess", { message: "Connected to WebSocket server!" });
+});
   
   if (!games.has(gameCode)) {
     games.set(gameCode, {
@@ -941,7 +954,7 @@ io.on('connection', (socket) => {
       io.to(gameCode).emit('gameState', gameState);
     }
   });
-});
+
 
 // Initialize blockchain connection when server starts
 const blockchainInitialized = initializeBlockchain();
